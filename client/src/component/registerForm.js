@@ -3,35 +3,16 @@ import React, { Component } from "react";
 //import axios from "axios";
 
 class Register extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      email: "abc",
-      password: "",
-      confirmPassword: "",
-      value: ""
-    };
-
-    this.handleEmailChange = this.handleEmailChange.bind(this);
-    this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.handleConfirmPasswordChange = this.handleConfirmPasswordChange.bind(
-      this
-    );
-  }
-
   state = {
-    email: "abc",
-    password: "",
-    confirmPassword: ""
+    email: "",
+    password: ""
   };
+
   handleEmailChange = event => {
     this.setState({ email: event.target.value });
   };
   handlePasswordChange = event => {
     this.setState({ password: event.target.value });
-  };
-  handleConfirmPasswordChange = event => {
-    this.setState({ confirmPassword: event.target.value });
   };
 
   handleSubmit(event) {
@@ -70,8 +51,8 @@ class Register extends Component {
                 <div className="field">
                   <label>Enter Email </label>
                   <input
-                    onChange={this.handleEmailChange.bind(this)}
-                    value={this.state.value}
+                    onChange={this.handleEmailChange}
+                    value={this.state.email}
                     type="text"
                     placeholder="Enter Email"
                   />
@@ -79,19 +60,10 @@ class Register extends Component {
                 <div className="field">
                   <label>Enter Password </label>
                   <input
-                    onChange={this.handlePasswordChange.bind(this)}
-                    value={this.state.value}
+                    onChange={this.handlePasswordChange}
+                    value={this.state.password}
                     type="text"
                     placeholder="Enter Password"
-                  />
-                </div>
-                <div className="field">
-                  <label>Enter Confirm Password</label>
-                  <input
-                    onChange={this.handleConfirmPasswordChange}
-                    value={this.state.value}
-                    type="text"
-                    placeholder="Enter Confirm Password"
                   />
                 </div>
               </div>

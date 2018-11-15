@@ -1,13 +1,11 @@
 import React, { Component } from "react";
 
-class form extends Component {
+class LoginForm extends Component {
   state = {
     response: "",
-    post: "",
     responseToPost: "",
     email: "",
-    password: "",
-    confirmPassword: ""
+    password: ""
   };
 
   // componentDidMount() {
@@ -29,15 +27,14 @@ class form extends Component {
     e.preventDefault();
     console.log(this.state.email);
     console.log(this.state.password);
-    const response = await fetch("/api/auth", {
+    const response = await fetch("/api/sign_in", {
       method: "POST",
       headers: {
         "Content-Type": "application/json"
       },
       body: JSON.stringify({
         email: this.state.email,
-        password: this.state.password,
-        confirmPassword: this.state.confirmPassword
+        password: this.state.password
       })
     });
     const body = await response.text();
@@ -66,14 +63,6 @@ class form extends Component {
             value={this.state.password}
             onChange={e => this.setState({ password: e.target.value })}
           />
-          <p>
-            <strong>Confirm Password:</strong>
-          </p>
-          <input
-            type="text"
-            value={this.state.confirmPassword}
-            onChange={e => this.setState({ confirmPassword: e.target.value })}
-          />
           <br />
           <br />
           <div>
@@ -86,4 +75,4 @@ class form extends Component {
   }
 }
 
-export default form;
+export default LoginForm;
