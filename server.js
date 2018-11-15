@@ -19,11 +19,13 @@ app.get("/api/hello", (req, res) => {
 
 app.post("/api/world", (req, res) => {
   //console.log(req.body);
-  console.log(req.body.post);
+  console.log(req.body.email);
+  console.log(req.body.password);
+  console.log(req.body.confirmPassword);
   console.log("i am at post call");
-  new User({ postTweet: req.body.post }).save();
+  // new User({ postTweet: req.body.post }).save();
   res.send(
-    `I received your POST request. This is what you sent me: ${req.body.post}`
+    `I received your POST request. This is what you sent me: ${req.body.email}`
   );
 });
 
