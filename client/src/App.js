@@ -1,17 +1,13 @@
 import React, { Component } from "react";
 
 import "./App.css";
+import Router from "./Router/Router";
 
-import FormRegister from "./component/form";
-import LoginForm from "./component/LoginForm";
-import CreateAd from "./component/createAd";
 class App extends Component {
   render() {
     return (
       <div className="App">
-        {/* <FormRegister /> */}
-        <LoginForm />
-        <CreateAd />
+        <Router />
       </div>
     );
   }
