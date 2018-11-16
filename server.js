@@ -1,27 +1,46 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const path = require("path");
+var session = require("express-session");
 const bodyParser = require("body-parser");
 require("./models/User");
 mongoose.connect("mongodb://hamza:hamza123@ds011963.mlab.com:11963/dummy-post");
 var request = require("request");
-
 const app = express();
 const port = process.env.PORT || 5000;
-const User = mongoose.model("users");
-
+//const User = mongoose.model("users");
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
+app.use(session({ secret: "ssshhhhh", saveUninitialized: true, resave: true }));
+
 var client = "";
 var access_token = "";
 var expiry = "";
 var email = "";
-// API calls
+
+var sess;
+
+// app.get("/", function(req, res) {
+//   sess = req.session;
+//   if (sess.email) {
+//     res.redirect("/admin");
+//   } else {
+//     res.render("index.html");
+//   }
+// });
+
+// app.post("/login", function(req, res) {
+//   sess = req.session;
+//   sess.email = req.body.email;
+//   res.end("done");
+// });
+
+// API calls dummy
 app.get("/api/hello", (req, res) => {
   res.send({ express: "Hello From Express" });
 });
 
-// api for new User
+// api for new User Post call
 app.post("/api/auth", (req, res) => {
   request.post(
     "http://54.66.225.168/auth",
@@ -44,7 +63,7 @@ app.post("/api/auth", (req, res) => {
   );
 });
 
-// api for create Ad
+// api for create Ad Post call
 app.post("/api/post_ad_p", (req, res) => {
   request.post(
     {
@@ -73,8 +92,10 @@ app.post("/api/post_ad_p", (req, res) => {
   );
 });
 
-// Login User Api Call
+// Login User Api Call Post
 app.post("/api/sign_in", (req, res) => {
+  console.log("i am in login call");
+
   request.post(
     "http://54.66.225.168/auth/sign_in",
     {
@@ -88,10 +109,16 @@ app.post("/api/sign_in", (req, res) => {
         email = response.headers.uid;
         client = response.headers.client;
         var result = [];
-
         for (var i in response.headers) result.push(i, response.headers[i]);
         access_token = result[17];
         expiry = response.headers.expiry;
+        //store Session Data User
+        sess = req.session;
+        sess.email = req.body.email;
+        console.log("in user login session create");
+        console.log(req.session);
+
+        res.end("done");
       }
     }
   );
@@ -107,6 +134,34 @@ app.get("/api/login_user_data", (req, res) => {
     access_token: access_token,
     expiry: expiry,
     email: email
+  });
+});
+
+app.get("/admin", function(req, res) {
+  sess = req.session;
+  console.log("I am in admin api");
+  console.log(sess);
+  //sess = req.session;
+  // console.log("i am at admin api");
+  // console.log(req.session);
+  // console.log(sess.email);
+  if (sess.email) {
+    res.write("<h1>Hello " + sess.email + "</h1><br>");
+    res.end("<a href=" + "/logout" + ">Logout</a>");
+  } else {
+    res.write("<h1>Please login first.</h1>");
+    res.end("<a href=" + "/" + ">Login</a>");
+  }
+});
+
+app.get("/logout", function(req, res) {
+  console.log(req.session);
+  req.session.destroy(function(err) {
+    if (err) {
+      console.log(err);
+    } else {
+      res.redirect("/login");
+    }
   });
 });
 
