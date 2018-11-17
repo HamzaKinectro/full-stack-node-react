@@ -1,4 +1,8 @@
 import React from "react";
+import { Input } from "antd";
+import { Button } from "antd";
+
+const { TextArea } = Input;
 
 class CreateAd extends React.Component {
   constructor(props) {
@@ -16,8 +20,6 @@ class CreateAd extends React.Component {
   handleSubmit = async event => {
     event.preventDefault();
     const data1 = this.state.value;
-
-    console.log(data1);
 
     // axios({
     //   method: "post",
@@ -55,20 +57,28 @@ class CreateAd extends React.Component {
           <div className="content">
             <form className="ui reply form" onSubmit={this.handleSubmit}>
               <label>
-                Enter JSON OBJECT
-                <textarea
-                  type="text"
-                  className="field"
+                ENTER JSON OBJECT :
+                <br />
+                <br />
+                <TextArea
+                  rows={8}
                   value={this.state.value}
                   onChange={this.handleChange}
+                  type="text"
+                  className="field"
                 />
               </label>
               <br />
-              <input
+              <br />
+
+              {/* <input
                 className="ui primary button"
                 type="submit"
                 value="Submit"
-              />
+              /> */}
+              <Button type="primary" htmlType="submit" value="Submit">
+                Submit
+              </Button>
             </form>
           </div>
         </div>

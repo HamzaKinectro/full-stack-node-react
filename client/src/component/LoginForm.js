@@ -1,78 +1,93 @@
 import React, { Component } from "react";
+import { Form, Icon, Input, Button, Checkbox } from "antd";
+import { Card } from "antd";
+
+const FormItem = Form.Item;
 
 class LoginForm extends Component {
-  state = {
-    response: "",
-    responseToPost: "",
-    email: "",
-    password: ""
-  };
-
-  // componentDidMount() {
-  //   this.callApi()
-  //     .then(res => this.setState({ response: res.express }))
-  //     .catch(err => console.log(err));
-  // }
-
-  //   callApi = async () => {
-  //     const response = await fetch("/api/hello");
-  //     const body = await response.json();
-
-  //     if (response.status !== 200) throw Error(body.message);
-
-  //     return body;
-  //   };
-
-  handleSubmit = async e => {
+  handleSubmit = e => {
     e.preventDefault();
-    console.log(this.state.email);
-    console.log(this.state.password);
-    const response = await fetch("/api/sign_in", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json"
-      },
-      body: JSON.stringify({
-        email: this.state.email,
-        password: this.state.password
-      })
+    this.props.form.validateFields((err, values) => {
+      const { userName, password } = values;
+      if (!err) {
+        fetch("/api/sign_in", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            email: userName,
+            password: password
+          })
+        });
+      } else {
+        console.log("Something went Wrong!");
+      }
     });
-    const body = await response.text();
-
-    this.setState({ responseToPost: body });
   };
 
   render() {
+    const { getFieldDecorator } = this.props.form;
     return (
-      <div>
-        <p>{this.state.response}</p>
-        <form onSubmit={this.handleSubmit}>
-          <p>
-            <strong>Email:</strong>
-          </p>
-          <input
-            type="text"
-            value={this.state.email}
-            onChange={e => this.setState({ email: e.target.value })}
-          />
-          <p>
-            <strong>Password:</strong>
-          </p>
-          <input
-            type="text"
-            value={this.state.password}
-            onChange={e => this.setState({ password: e.target.value })}
-          />
-          <br />
-          <br />
-          <div>
-            <button type="submit">Submit</button>
-          </div>
-        </form>
-        <p>{this.state.responseToPost}</p>
-      </div>
+      <Card style={{ marginLeft: "40%", marginRight: "36%", marginTop: "10%" }}>
+        <Form
+          onSubmit={this.handleSubmit}
+          className="login-form"
+          style={{ width: "300px" }}
+        >
+          <FormItem>
+            {getFieldDecorator("userName", {
+              rules: [
+                { required: true, message: "Please input your username!" }
+              ]
+            })(
+              <Input
+                prefix={
+                  <Icon type="user" style={{ color: "rgba(0,0,0,.25)" }} />
+                }
+                placeholder="Username"
+              />
+            )}
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator("password", {
+              rules: [
+                { required: true, message: "Please input your Password!" }
+              ]
+            })(
+              <Input
+                prefix={
+                  <Icon type="lock" style={{ color: "rgba(0,0,0,.25)" }} />
+                }
+                type="password"
+                placeholder="Password"
+              />
+            )}
+          </FormItem>
+          <FormItem>
+            {getFieldDecorator("remember", {
+              valuePropName: "checked",
+              initialValue: true
+            })(<Checkbox>Remember me</Checkbox>)}
+            <a className="login-form-forgot" style={{ float: "right" }}>
+              Forgot password
+            </a>
+            <Button
+              type="primary"
+              htmlType="submit"
+              className="login-form-button"
+              style={{ width: "100%" }}
+            >
+              Log in
+            </Button>
+            Or <a>register now!</a>
+          </FormItem>
+        </Form>
+      </Card>
     );
   }
 }
 
-export default LoginForm;
+const WrappedNormalLoginForm = Form.create()(LoginForm);
+
+export default WrappedNormalLoginForm;
