@@ -36,7 +36,7 @@ var sess;
 // });
 
 // API calls dummy
-app.get("/api/hello", (req, res) => {
+app.get("/", (req, res) => {
   res.send({ express: "Hello From Express" });
 });
 
@@ -114,11 +114,11 @@ app.post("/api/sign_in", (req, res) => {
         expiry = response.headers.expiry;
         //store Session Data User
         sess = req.session;
-        sess.email = req.body.email;
+        sess.email = email;
+        req.session.save();
         console.log("in user login session create");
         console.log(req.session);
-
-        res.end("done");
+        //res.end("done");
       }
     }
   );
