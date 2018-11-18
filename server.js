@@ -17,6 +17,7 @@ var client = "";
 var access_token = "";
 var expiry = "";
 var email = "";
+var apiresponse;
 
 var sess;
 
@@ -116,15 +117,32 @@ app.post("/api/sign_in", (req, res) => {
         sess = req.session;
         sess.email = email;
         req.session.save();
+        res = access_token;
         console.log("in user login session create");
         console.log(req.session);
         //res.end("done");
+        //res.redirect("/admin");
+        //console.log(response.body);
+        apiresponse = response.body;
+        console.log("apiresponse");
+        console.log(apiresponse);
+        //   console.log("body");
+        //   console.log(response.body);
+        // response.send(body);
+        // response.send(true);
+        //response.end("saddssadasddasasd");
+      } else {
+        apiresponse = response.body.errors;
       }
+
+      //      response.write("sdsdssdd");
     }
   );
-  res.send(
-    `I received your POST request. This is what you sent me: ${req.body.email}`
-  );
+  //  console.log("api response value at server level is ");
+  //  console.log(apiresponse);
+  // res.send({
+  //   apiresponse
+  // });
 });
 
 // get api use to store the login User Data

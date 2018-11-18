@@ -1,16 +1,21 @@
 import React, { Component } from "react";
 import { Form, Icon, Input, Button, Checkbox } from "antd";
 import { Card } from "antd";
-
+import { Link } from "react-router-dom";
+import Redirect from "react-router-dom/Redirect";
 const FormItem = Form.Item;
 
+var res;
 class LoginForm extends Component {
+  state = {
+    responseToPost: ""
+  };
   handleSubmit = e => {
     e.preventDefault();
     this.props.form.validateFields((err, values) => {
       const { userName, password } = values;
       if (!err) {
-        fetch("/api/sign_in", {
+        const respo = fetch("/api/sign_in", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
@@ -28,6 +33,7 @@ class LoginForm extends Component {
 
   render() {
     const { getFieldDecorator } = this.props.form;
+    console.log(this.state.responseToPost);
     return (
       <Card style={{ marginLeft: "40%", marginRight: "36%", marginTop: "10%" }}>
         <Form
@@ -69,9 +75,9 @@ class LoginForm extends Component {
               valuePropName: "checked",
               initialValue: true
             })(<Checkbox>Remember me</Checkbox>)}
-            <a className="login-form-forgot" style={{ float: "right" }}>
+            <span className="login-form-forgot" style={{ float: "right" }}>
               Forgot password
-            </a>
+            </span>
             <Button
               type="primary"
               htmlType="submit"
@@ -80,7 +86,8 @@ class LoginForm extends Component {
             >
               Log in
             </Button>
-            Or <a>register now!</a>
+
+            <Link to="/registration">register now!</Link>
           </FormItem>
         </Form>
       </Card>

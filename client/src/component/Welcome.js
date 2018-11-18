@@ -4,6 +4,8 @@ class Welcome extends React.Component {
   render() {
     return (
       <div>
+        <h2>Loged in user data</h2>
+
         <h2>Welcome to Result First</h2>
         <h3>You are Successful Login</h3>
       </div>

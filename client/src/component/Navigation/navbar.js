@@ -1,10 +1,40 @@
 import React from "react";
 import { Layout, Menu } from "antd";
 import { Link } from "react-router-dom";
-
+import axios from "axios";
 const { Header } = Layout;
 
 class Navbar extends React.Component {
+  state = {
+    email: "",
+    client: "",
+    expiry: "",
+    access_token: ""
+  };
+
+  componentDidMount() {
+    this.callApi()
+      .then(res => this.setState({ response: res.express }))
+      .catch(err => console.log(err));
+  }
+
+  callApi = async () => {
+    const response = axios
+      .get("/api/login_user_data")
+      .then(function(response) {
+        console.log(response.data);
+      })
+      .catch(function(error) {
+        console.log(error);
+      });
+
+    const body = await response.json();
+
+    if (response.status !== 200) throw Error(body.message);
+    //console.log(body);
+    return body;
+  };
+
   render() {
     return (
       <Layout className="layout">
