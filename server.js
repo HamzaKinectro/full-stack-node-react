@@ -30,120 +30,110 @@ var sess;
 //   }
 // });
 
-// app.post("/login", function(req, res) {
-//   sess = req.session;
-//   sess.email = req.body.email;
-//   res.end("done");
-// });
-
 // API calls dummy
 app.get("/", (req, res) => {
   res.send({ express: "Hello From Express" });
 });
 
 // api for new User Post call
-app.post("/api/auth", (req, res) => {
-  request.post(
-    "http://54.66.225.168/auth",
-    {
-      json: {
-        email: req.body.email,
-        password: req.body.password,
-        confirmPassword: req.body.confirmPassword
-      }
-    },
-    function(error, response, body) {
-      if (!error && response.statusCode == 200) {
-        console.log(body);
-      }
-    }
-  );
-  // new User({ postTweet: req.body.post }).save();
-  res.send(
-    `I received your POST request. This is what you sent me: ${req.body.email}`
-  );
-});
+require("./services/auth/registration")(app);
+// app.post("/api/auth", (req, res) => {
+//   request.post(
+//     "http://54.66.225.168/auth",
+//     {
+//       json: {
+//         email: req.body.email,
+//         password: req.body.password,
+//         confirmPassword: req.body.confirmPassword
+//       }
+//     },
+//     function(error, response, body) {
+//       if (!error && response.statusCode == 200) {
+//         console.log(body);
+//       }
+//     }
+//   );
+//   // new User({ postTweet: req.body.post }).save();
+//   res.send(
+//     `I received your POST request. This is what you sent me: ${req.body.email}`
+//   );
+// });
 
 // api for create Ad Post call
-app.post("/api/post_ad_p", (req, res) => {
-  request.post(
-    {
-      url: "http://54.66.225.168/post_ad_p",
-      headers: {
-        "User-Agent":
-          "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36",
-        "Content-Type": "application/x-www-form-urlencoded",
-        "access-token": access_token,
-        client: client,
-        expiry: expiry,
-        uid: email
-      },
-      form: req.body.data,
-      method: "POST"
-    },
-    function(e, r, body) {
-      if (!e && r.statusCode == 200) {
-        console.log(body);
-      }
-    }
-  );
+require("./services/createAd/createAd")(app);
+// app.post("/api/post_ad_p", (req, res) => {
+//   request.post(
+//     {
+//       url: "http://54.66.225.168/post_ad_p",
+//       headers: {
+//         "User-Agent":
+//           "Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/27.0.1453.110 Safari/537.36",
+//         "Content-Type": "application/x-www-form-urlencoded",
+//         "access-token": access_token,
+//         client: client,
+//         expiry: expiry,
+//         uid: email
+//       },
+//       form: req.body.data,
+//       method: "POST"
+//     },
+//     function(e, r, body) {
+//       if (!e && r.statusCode == 200) {
+//         console.log(body);
+//       }
+//     }
+//   );
 
-  res.send(
-    `I received your POST request. This is what you sent me: ${req.body.data}`
-  );
-});
+//   res.send(
+//     `I received your POST request. This is what you sent me: ${req.body.data}`
+//   );
+// });
 
 // Login User Api Call Post
-app.post("/api/sign_in", (req, res) => {
-  console.log("i am in login call");
+require("./services/auth/login")(app);
 
-  request.post(
-    "http://54.66.225.168/auth/sign_in",
-    {
-      json: {
-        email: req.body.email,
-        password: req.body.password
-      }
-    },
-    function(error, response, body) {
-      if (!error && response.statusCode == 200) {
-        email = response.headers.uid;
-        client = response.headers.client;
-        var result = [];
-        for (var i in response.headers) result.push(i, response.headers[i]);
-        access_token = result[17];
-        expiry = response.headers.expiry;
-        //store Session Data User
-        sess = req.session;
-        sess.email = email;
-        req.session.save();
-        res = access_token;
-        console.log("in user login session create");
-        console.log(req.session);
-        //res.end("done");
-        //res.redirect("/admin");
-        //console.log(response.body);
-        apiresponse = response.body;
-        console.log("apiresponse");
-        console.log(apiresponse);
-        //   console.log("body");
-        //   console.log(response.body);
-        // response.send(body);
-        // response.send(true);
-        //response.end("saddssadasddasasd");
-      } else {
-        apiresponse = response.body.errors;
-      }
+// app.post("/api/sign_in", (req, res) => {
+//   console.log("i am in login call");
 
-      //      response.write("sdsdssdd");
-    }
-  );
-  //  console.log("api response value at server level is ");
-  //  console.log(apiresponse);
-  // res.send({
-  //   apiresponse
-  // });
-});
+//   request.post(
+//     "http://54.66.225.168/auth/sign_in",
+//     {
+//       json: {
+//         email: req.body.email,
+//         password: req.body.password
+//       }
+//     },
+//     function(error, response, body) {
+//       if (!error && response.statusCode == 200) {
+//         email = response.headers.uid;
+//         client = response.headers.client;
+//         var result = [];
+//         for (var i in response.headers) result.push(i, response.headers[i]);
+//         access_token = result[17];
+//         expiry = response.headers.expiry;
+//         //store Session Data User
+//         sess = req.session;
+//         sess.email = email;
+//         req.session.save();
+//         res = access_token;
+//         console.log("in user login session create");
+//         console.log(req.session);
+//         //res.end("done");
+//         //res.redirect("/admin");
+//         //console.log(response.body);
+//         apiresponse = response.body;
+//         console.log("apiresponse");
+//         console.log(apiresponse);
+//       } else {
+//         apiresponse = response.body.errors;
+//       }
+//     }
+//   );
+//   console.log(apiresponse);
+//   res.send({
+//     apiresponse
+//   });
+// });
 
 // get api use to store the login User Data
 app.get("/api/login_user_data", (req, res) => {
