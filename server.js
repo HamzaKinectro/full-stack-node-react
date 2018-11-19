@@ -12,12 +12,6 @@ app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(session({ secret: "ssshhhhh", saveUninitialized: true, resave: true }));
 
-var client = "";
-var access_token = "";
-var expiry = "";
-var email = "";
-var apiresponse;
-
 var sess;
 
 app.get("/", (req, res) => {
@@ -34,14 +28,7 @@ require("./services/createAd/createAd")(app);
 require("./services/auth/login")(app);
 
 // get api use to store the login User Data
-app.get("/api/login_user_data", (req, res) => {
-  res.send({
-    client: client,
-    access_token: access_token,
-    expiry: expiry,
-    email: email
-  });
-});
+require("./services/user/user")(app);
 
 app.get("/admin", function(req, res) {
   sess = req.session;

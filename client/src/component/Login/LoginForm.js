@@ -2,10 +2,10 @@ import React, { Component } from "react";
 import { Form, Icon, Input, Button, Checkbox } from "antd";
 import { Card } from "antd";
 import { Link } from "react-router-dom";
-import Redirect from "react-router-dom/Redirect";
+//import Redirect from "react-router-dom/Redirect";
 const FormItem = Form.Item;
 
-var res;
+//var res;
 class LoginForm extends Component {
   state = {
     responseToPost: ""
@@ -15,7 +15,7 @@ class LoginForm extends Component {
     this.props.form.validateFields((err, values) => {
       const { userName, password } = values;
       if (!err) {
-        const respo = fetch("/api/sign_in", {
+        fetch("/api/sign_in", {
           method: "POST",
           headers: {
             "Content-Type": "application/json"
